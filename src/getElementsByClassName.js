@@ -4,16 +4,21 @@
 // };
 
 // But instead we're going to implement it from scratch:
-var getElementsByClassName = function(className, element) {
-  if (!element) {
-    element = document.body;
-  }
+var getElementsByClassName = function(className) {
+  var body = document.body;
   var output = [];
-  if (element.classList !== undefined && element.classList.contains(className)) {
-    output.push(element);
-  }
-  for (var i = 0; i < element.childNodes.length; i++) {
-    output = output.concat(getElementsByClassName(className, element.childNodes[i]));
-  }
+
+  var search = function (element) {
+    if (element.classList && element.classList.contains(className)) {
+      output.push(element);
+    }
+    if (element.hasChildNodes) {
+      for (var i = 0; i < element.childNodes.length; i++) {
+        search(element.childNodes[i]);
+      }
+    }
+  };
+
+  search(body);
   return output;
 };
